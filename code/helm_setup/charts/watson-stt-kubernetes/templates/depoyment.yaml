@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-watson-stt-embed
-#  namespace: {{ .Values.default_namespace }}
+  namespace: {{ .Values.default_namespace }}
 #  labels:
 #    app.kubernetes.io/name: "ibm-watson-stt-embed"
 #    app.kubernetes.io/component: "runtime"

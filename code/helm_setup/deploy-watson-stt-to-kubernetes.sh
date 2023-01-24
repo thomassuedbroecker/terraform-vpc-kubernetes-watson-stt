@@ -102,8 +102,9 @@ function verifyWatsonSTTContainer () {
     export FIND="ibm-watson-stt-embed"
     POD=$(kubectl get pods -n $DEFAULT_NAMESPACE | grep $FIND | awk '{print $1;}')
     echo "Pod: $POD"
-    export FIND="runtime"
-    RESULT=$(kubectl exec --stdin --tty $POD --container $FIND -- curl -sLo example.flac https://github.com/watson-developer-cloud/doc-tutorial-downloads/raw/master/speech-to-text/0001.flac)
+    export RUNTIME_CONTAINER="runtime"
+    RESULT=$(kubectl exec --stdin --tty $POD --container $RUNTIME_CONTAINER -n $DEFAULT_NAMESPACE -- curl -sLo example.flac https://github.com/watson-developer-cloud/doc-tutorial-downloads/raw/master/speech-to-text/0001.flac)
+    RESULT=$(kubectl exec --stdin --tty $POD --container $RUNTIME_CONTAINER -n $DEFAULT_NAMESPACE -- ls | grep 'example')
     echo ""
     echo "Result of download the example audio:"
     echo ""
@@ -113,8 +114,8 @@ function verifyWatsonSTTContainer () {
     echo "Result of the Watson STT REST API invocation:"
     POD=$(kubectl get pods -n $DEFAULT_NAMESPACE | grep $FIND | awk '{print $1;}')
     echo "Pod: $POD"
-    export FIND="runtime"
-    RESULT=$(kubectl exec --stdin --tty $POD --container $FIND --  curl "http://localhost:1080/speech-to-text/api/v1/recognize" --header "Content-Type: audio/flac"  --data-binary @example.flac)
+    export RUNTIME_CONTAINER="runtime"
+    RESULT=$(kubectl exec --stdin --tty $POD -n $DEFAULT_NAMESPACE --container $RUNTIME_CONTAINER --  curl "http://localhost:1080/speech-to-text/api/v1/recognize" --header "Content-Type: audio/flac"  --data-binary @example.flac)
     echo ""
     echo "Result of download the example audio:"
     echo ""
@@ -150,7 +151,7 @@ function verifyWatsonSTTLoadbalancer () {
     echo "EXTERNAL_IP: $EXTERNAL_IP"
     echo "Verify invocation of Watson STT API from the local machine:"
     curl -sLo example.flac https://github.com/watson-developer-cloud/doc-tutorial-downloads/raw/master/speech-to-text/0001.flac
-    curl "http://localhost:1080/speech-to-text/api/v1/recognize" \
+    curl "http://$EXTERNAL_IP:1080/speech-to-text/api/v1/recognize" \
         --header "Content-Type: audio/flac" \
         --data-binary @example.flac
 }
