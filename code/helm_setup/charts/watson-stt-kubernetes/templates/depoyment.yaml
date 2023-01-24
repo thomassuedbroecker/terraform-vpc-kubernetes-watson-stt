@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-watson-stt-embed
+  namespace: {{ .Values.default_namespace }}
   labels:
     app.kubernetes.io/name: "ibm-watson-stt-embed"
     app.kubernetes.io/component: "runtime"
@@ -24,7 +25,7 @@ spec:
       - name: ibm-entitlement-key
       initContainers:
       - name: catalog
-        image: cp.icr.io/cp/ai/watson-stt-generic-models:1.1.0
+        image: {{ .Values.watson_stt_runtime }}
         # use args to not override license entrypoint
         args:
         - cp
