@@ -1,9 +1,10 @@
-# Run Watson NLP for Embed on an IBM Cloud Kubernetes cluster
+# Run Watson STT for Embed on an IBM Cloud Kubernetes cluster
 
 This example project has two objectives.
 
 * Create an IBM Cloud Kubernetes cluster in a [`Virtual Private Cloud` (VPC) environment](https://www.ibm.com/topics/vpc) with [Terraform](https://www.terraform.io/)
-* Deploy [Watson NLP for embed`](https://www.ibm.com/docs/en/watson-libraries?topic=watson-natural-language-processing-library-embed-home) to the created cluster with [Helm](https://helm.sh/)
+* Deploy [Watson STT for embed`](https://www.ibm.com/docs/en/watson-libraries?topic=watson-speech-text-library-embed-home) to the created cluster with [Helm](https://helm.sh/), but a bit different to the IBM documentation here [`Run with Helm Charts`](https://www.ibm.com/docs/en/watson-libraries?topic=containers-run-helm-chart).
+
 
 The example project reuses code from project [`Use Terraform to create a VPC and a Kubernetes Cluster on IBM Cloud`](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes).
 
