@@ -48,7 +48,7 @@ spec:
           mountPath: /opt/ibm/chuck.x86_64/var
 
       - name: watson-stt-en-us-multimedia
-        image: cp.icr.io/cp/ai/watson-stt-en-us-multimedia:1.1.0
+        image: {{ .Values.watson_stt_en_us_multimedia }}
         args:
         - sh
         - -c
