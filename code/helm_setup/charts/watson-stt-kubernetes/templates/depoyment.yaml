@@ -92,7 +92,7 @@ spec:
           mountPath: /models/pool2
 
       - name: prepare-models
-        image: cp.icr.io/cp/ai/watson-stt-runtime:1.1.0
+        image: {{ .Values.watson_stt_runtime }}
         args:
         - prepare_models.sh
         env:
@@ -126,7 +126,7 @@ spec:
 
       containers:
       - name: runtime
-        image: cp.icr.io/cp/ai/watson-stt-runtime:1.1.0
+        image: {{ .Values.watson_stt_runtime }}
         resources:
           limits:
             cpu: 4
