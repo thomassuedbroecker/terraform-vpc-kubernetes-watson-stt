@@ -8,7 +8,7 @@ This example project has two objectives.
 
 The example project reuses code from project [`Use Terraform to create a VPC and a Kubernetes Cluster on IBM Cloud`](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes).
 
-> Visit the related blog post [`Run Watson NLP for Embed on an IBM Cloud Kubernetes cluster in a Virtual Private Cloud environment`](https://suedbroecker.net/2023/01/12/run-watson-nlp-for-embed-on-an-ibm-cloud-kubernetes-cluster-in-a-virtual-private-cloud-environment/).
+> Visit the related blog post [`TBD`](TBD).
 
 ### Simplified IBM Cloud architecture diagram
 
