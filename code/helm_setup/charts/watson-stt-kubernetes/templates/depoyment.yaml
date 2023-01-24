@@ -1,0 +1,208 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-watson-stt-embed
+  labels:
+    app.kubernetes.io/name: "ibm-watson-stt-embed"
+    app.kubernetes.io/component: "runtime"
+    app.kubernetes.io/instance: "example"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "ibm-watson-stt-embed"
+      app.kubernetes.io/component: "runtime"
+      app.kubernetes.io/instance: "example"
+  progressDeadlineSeconds: 1800
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "ibm-watson-stt-embed"
+        app.kubernetes.io/component: "runtime"
+        app.kubernetes.io/instance: "example"
+    spec:
+      imagePullSecrets:
+      - name: ibm-entitlement-key
+      initContainers:
+      - name: catalog
+        image: cp.icr.io/cp/ai/watson-stt-generic-models:1.1.0
+        # use args to not override license entrypoint
+        args:
+        - cp
+        - catalog.json
+        - /opt/ibm/chuck.x86_64/var/catalog.json
+        env:
+        - name: ACCEPT_LICENSE
+          value: "true"
+        resources:
+          limits:
+            cpu: 1
+            ephemeral-storage: 1Gi
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            ephemeral-storage: 1Gi
+            memory: 256Mi
+        volumeMounts:
+        - name: chuck-var
+          mountPath: /opt/ibm/chuck.x86_64/var
+
+      - name: watson-stt-en-us-multimedia
+        image: cp.icr.io/cp/ai/watson-stt-en-us-multimedia:1.1.0
+        args:
+        - sh
+        - -c
+        - cp model/* /models/pool2
+        env:
+        - name: ACCEPT_LICENSE
+          value: "true"
+        resources:
+          limits:
+            cpu: 1
+            ephemeral-storage: 1Gi
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            ephemeral-storage: 1Gi
+            memory: 256Mi
+        volumeMounts:
+        - name: models
+          mountPath: /models/pool2
+
+      - name: watson-stt-en-us-telephony
+        image: cp.icr.io/cp/ai/watson-stt-en-us-telephony:1.1.0
+        args:
+        - sh
+        - -c
+        - cp model/* /models/pool2
+        env:
+        - name: ACCEPT_LICENSE
+          value: "true"
+        resources:
+          limits:
+            cpu: 1
+            ephemeral-storage: 1Gi
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            ephemeral-storage: 1Gi
+            memory: 256Mi
+        volumeMounts:
+        - name: models
+          mountPath: /models/pool2
+
+      - name: prepare-models
+        image: cp.icr.io/cp/ai/watson-stt-runtime:1.1.0
+        args:
+        - prepare_models.sh
+        env:
+        - name: ACCEPT_LICENSE
+          value: "true"
+        - name: CATALOG_PATH
+          value: "var/catalog.json"
+        # MODELS is a comma separated list of Model IDs
+        - name: MODELS
+          value: "en-US_Multimedia,en-US_Telephony"
+        - name: DEFAULT_MODEL
+          value: "en-US_Multimedia"
+        resources:
+          limits:
+            cpu: 4
+            ephemeral-storage: 1Gi
+            memory: 4Gi
+          requests:
+            cpu: 1
+            ephemeral-storage: 1Gi
+            memory: 4Gi
+        volumeMounts:
+        - name: chuck-var
+          mountPath: /opt/ibm/chuck.x86_64/var
+        - name: chuck-logs
+          mountPath: /opt/ibm/chuck.x86_64/logs
+        - name: tmp
+          mountPath: /tmp
+        - name: models
+          mountPath: /models/pool2
+
+      containers:
+      - name: runtime
+        image: cp.icr.io/cp/ai/watson-stt-runtime:1.1.0
+        resources:
+          limits:
+            cpu: 4
+            ephemeral-storage: 1Gi
+            memory: 4Gi
+          requests:
+            cpu: 1
+            ephemeral-storage: 1Gi
+            memory: 4Gi
+        env:
+        - name: ACCEPT_LICENSE
+          value: "true"
+        - name: CATALOG_PATH
+          value: "var/catalog.json"
+        # MODELS is a comma separated list of Model IDs
+        - name: MODELS
+          value: "en-US_Multimedia,en-US_Telephony"
+        - name: DEFAULT_MODEL
+          value: "en-US_Multimedia"
+        - name: RESOURCES_CPU
+          valueFrom:
+            resourceFieldRef:
+              containerName: runtime
+              resource: requests.cpu
+        - name: RESOURCES_MEMORY
+          valueFrom:
+            resourceFieldRef:
+              containerName: runtime
+              resource: requests.memory
+        ports:
+        - containerPort: 1080
+        startupProbe:
+          tcpSocket:
+            port: 1080
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 1080
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /v1/miniHealthCheck
+            port: 1080
+          periodSeconds: 10
+        volumeMounts:
+        - name: chuck-var
+          mountPath: /opt/ibm/chuck.x86_64/var
+        - name: chuck-logs
+          mountPath: /opt/ibm/chuck.x86_64/logs
+        - name: tmp
+          mountPath: /tmp
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sleep
+              - "15"
+
+      volumes:
+        - name: chuck-var
+          emptyDir: {}
+        - name: chuck-cache
+          emptyDir: {}
+        - name: chuck-logs
+          emptyDir: {}
+        - name: models
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "kubernetes.io/arch"
+                operator: In
+                values:
+                  - "amd64"
