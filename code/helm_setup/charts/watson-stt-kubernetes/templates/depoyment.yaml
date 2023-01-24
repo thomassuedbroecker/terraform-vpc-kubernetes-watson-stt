@@ -70,7 +70,7 @@ spec:
           mountPath: /models/pool2
 
       - name: watson-stt-en-us-telephony
-        image: cp.icr.io/cp/ai/watson-stt-en-us-telephony:1.1.0
+        image: {{ .Values.watson_stt_en_us_telephony }}
         args:
         - sh
         - -c
