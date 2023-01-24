@@ -167,7 +167,7 @@ function verifyLoadbalancer () {
     echo "*********************"
     echo ""
 
-    export max_retrys=10
+    export max_retrys=11
     j=0
     array=("watson-stt-container-vpc-nlb")
     export STATUS_SUCCESS=""

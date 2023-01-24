@@ -162,22 +162,133 @@ sh deploy-watson-stt-to-kubernetes.sh
 
 The script does following steps and the links are pointing to the relevant function in the bash automation:
 
-1. [Log on to IBM Cloud with an IBM Cloud API key.](TBD)
-2. [It ensures that is connected to the cluster.](TBD)
-3. [It creates a `Docker Config File` which will be used to create a pull secret.](TBD)
-4. [It installs the Helm chart for Watson STT embed configured for REST API usage.](TBD)
-5. [It verifies that the container is running and invokes a REST API call inside the `runtime-container` of Watson STT emded.](TBD)
-6. [It verifies that the exposed Kubernetes `URL` with a `load balancer service` is working and invokes a the same REST API call as before from the local machine.](TBD)
+1. [Log on to IBM Cloud with an IBM Cloud API key.](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes-watson-stt/blob/main/code/helm_setup/deploy-watson-stt-to-kubernetes.sh#L14)
+2. [It ensures that is connected to the cluster.](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes-watson-stt/blob/main/code/helm_setup/deploy-watson-stt-to-kubernetes.sh#L27)
+3. [It creates a `Docker Config File` which will be used to create a pull secret.](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes-watson-stt/blob/main/code/helm_setup/deploy-watson-stt-to-kubernetes.sh#L38)
+4. [It installs the Helm chart for Watson STT embed configured for REST API usage.](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes-watson-stt/blob/main/code/helm_setup/deploy-watson-stt-to-kubernetes.sh#L54)
+5. [It verifies that the container is running and invokes a REST API call inside the `runtime-container` of Watson STT emded.](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes-watson-stt/blob/main/code/helm_setup/deploy-watson-stt-to-kubernetes.sh#L93)
+6. [It verifies that the exposed Kubernetes `URL` with a `load balancer service` is working and invokes a the same REST API call as before from the local machine.](https://github.com/thomassuedbroecker/terraform-vpc-kubernetes-watson-stt/blob/main/code/helm_setup/deploy-watson-stt-to-kubernetes.sh#L138)
 
 * Example output:
 
 ```sh
+*********************
+loginIBMCloud
+*********************
 
-TBD
+API endpoint: https://cloud.ibm.com
+Region: us-east
+Authenticating...
+OK
+
+...
+
+*********************
+connectToCluster
+*********************
+
+OK
+
+...
+
+*********************
+createDockerCustomConfigFile
+*********************
+
+IBM_ENTITLEMENT_SECRET: 
+
+...
+
+*********************
+installHelmChart
+*********************
+
+...
+
+==> Linting watson-stt-kubernetes
+[INFO] Chart.yaml: icon is recommended
+
+==> Linting ./watson-stt-kubernetes/
+[INFO] Chart.yaml: icon is recommended
+
+2 chart(s) linted, 0 chart(s) failed
+NAME: watson-stt-kubernetes
+LAST DEPLOYED: Tue Jan 24 20:33:04 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+*********************
+verifyDeploment
+*********************
+
+
+------------------------------------------------------------------------
+Check for (ibm-watson-stt-embed)
+(1) from max retrys (4)
+Status: ibm-watson-stt-embed
+2023-01-24 20:33:06 Status: ibm-watson-stt-embed is created
+------------------------------------------------------------------------
+
+*********************
+verifyPod could take 10 min
+*********************
+
+
+------------------------------------------------------------------------
+Check for (ibm-watson-stt-embed)
+(1) from max retrys (10)
+Status: 0/1
+2023-01-24 20:33:06 Status: ibm-watson-stt-embed(0/1)
+------------------------------------------------------------------------
+(2) from max retrys (10)
+Status: 1/1
+2023-01-24 20:34:07 Status: ibm-watson-stt-embed is created
+------------------------------------------------------------------------
+
+*********************
+verifyWatsonSTTContainer
+*********************
+
+* Download audio
+Pod: ibm-watson-stt-embed-576544dd4f-9h6tw
+
+Result of download the example audio:
+
+Chuck              example.flac        mkEnv.sh              requirements.txt       runTrial.sh           var
+
+* Invocation of REST API audio
+Result of the Watson STT REST API invocation:
+Pod: ibm-watson-stt-embed-576544dd4f-9h6tw
+
+Result of download the example audio:
+
+http://localhost:1080/speech-to-text/api/v1/recognize
+
+{
+   "result_index": 0,
+   "results": [
+      {
+         "final": true,
+         "alternatives": [
+            {
+               "transcript": "several tornadoes touched down as a line of severe thunderstorms swept through colorado on sunday ",
+               "confidence": 0.99
+            }
+         ]
+      }
+   ]
+}
+
+Verify the running pod on your cluster.
+NAME                                    READY   STATUS    RESTARTS   AGE
+ibm-watson-stt-embed-576544dd4f-9h6tw   1/1     Running   0          71s
+Verify in the deployment in the Kubernetes dashboard.
 
 ```
 
 The image below shows the running container on the Kubernetes cluster.
 
-![](images/watson-nlp-kubernetes-01.png)
+![](images/watson-stt-kubernetes-01.png)
 
