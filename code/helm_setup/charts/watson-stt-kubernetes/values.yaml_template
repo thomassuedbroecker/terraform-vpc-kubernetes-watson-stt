@@ -1,7 +1,7 @@
 # container registery access
 ibm_entitlement_secret: "IBM_ENTITLEMENT_SECRET"
-watson_stt_runtime: "cp.icr.io/cp/ai/watson-stt-runtime:1.1.0"
-watson_stt_en_us_telephony: "cp.icr.io/cp/ai/watson-stt-en-us-telephony:1.1.0"
-watson_stt_catalog: "cp.icr.io/cp/ai/watson-stt-generic-models:1.1.0"
-watson_stt_en_us_multimedia: "cp.icr.io/cp/ai/watson-stt-en-us-multimedia:1.1.0"
-default_namespace: "default"
+watson_stt_runtime: cp.icr.io/cp/ai/watson-stt-runtime:1.1.0
+watson_stt_en_us_telephony: cp.icr.io/cp/ai/watson-stt-en-us-telephony:1.1.0
+watson_stt_catalog: cp.icr.io/cp/ai/watson-stt-generic-models:1.1.0
+watson_stt_en_us_multimedia: cp.icr.io/cp/ai/watson-stt-en-us-multimedia:1.1.0
+default_namespace: default

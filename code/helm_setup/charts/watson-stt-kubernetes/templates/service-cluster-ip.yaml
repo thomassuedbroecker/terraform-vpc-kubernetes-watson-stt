@@ -6,9 +6,10 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app.kubernetes.io/name: "ibm-watson-stt-embed"
-    app.kubernetes.io/component: "runtime"
-    app.kubernetes.io/instance: "example"
+    app: ibm-watson-stt-embed
+#    app.kubernetes.io/name: "ibm-watson-stt-embed"
+#    app.kubernetes.io/component: "runtime"
+#    app.kubernetes.io/instance: "example"
   ports:
     - name: runtime
       protocol: TCP
