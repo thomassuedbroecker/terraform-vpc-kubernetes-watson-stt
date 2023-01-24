@@ -42,3 +42,4 @@ override.tf.json
 # example: *tfplan*
 
 
+code/helm_setup/example.flac
