@@ -123,7 +123,7 @@ sh create_vpc_kubernetes_cluster_with_terraform.sh
 
 ```sh
 ...
-Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+Plan: 6 to add, 0 to change, 0 to destroy.
 *********************************
 ```
 

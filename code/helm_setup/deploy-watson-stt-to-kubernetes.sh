@@ -81,6 +81,8 @@ function uninstallHelmChart () {
     echo "uninstallHelmChart"
     echo "*********************"
     echo ""
+    echo "Press any key to move on:"
+    read ANY_VALUE
 
     TEMP_PATH_ROOT=$(pwd)
     cd $TEMP_PATH_ROOT/charts
@@ -128,9 +130,11 @@ function verifyWatsonSTTContainer () {
     echo "Verify the running pod on your cluster."
     kubectl get pods -n $DEFAULT_NAMESPACE
     echo "Verify in the deployment in the Kubernetes dashboard."
+    echo "https://cloud.ibm.com/kubernetes/clusters/$CLUSTER_ID/overview"
     echo ""
     open "https://cloud.ibm.com/kubernetes/clusters/$CLUSTER_ID/overview"
     echo ""
+    echo "Press any key to move on:"
 
     read ANY_VALUE
 }
