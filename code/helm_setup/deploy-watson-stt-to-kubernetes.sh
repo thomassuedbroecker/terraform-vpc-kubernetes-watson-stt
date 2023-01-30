@@ -81,7 +81,7 @@ function uninstallHelmChart () {
     echo "uninstallHelmChart"
     echo "*********************"
     echo ""
-    echo "Press any key to move on:"
+    echo "Press any key to move on with UNINSTALL:"
     read ANY_VALUE
 
     TEMP_PATH_ROOT=$(pwd)
